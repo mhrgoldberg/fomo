@@ -1,3 +1,25 @@
 {
-  "extends": "next/core-web-vitals"
+  // JavaScript files Config
+  "extends": ["airbnb-base", "next/core-web-vitals", "prettier"],
+
+  // TypeScript files Overide
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "plugins": ["@typescript-eslint"],
+      "extends": [
+        // "plugin:tailwindcss/recommended",
+        "airbnb-typescript",
+        "next/core-web-vitals",
+        "prettier"
+      ],
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "rules": {
+        "jsx-a11y/anchor-is-valid": "off", // Next.js link breaks rule
+        "react/jsx-props-no-spreading": "off" // _app.tsx uses spread operator
+      }
+    }
+  ]
 }
