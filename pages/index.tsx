@@ -4,11 +4,9 @@ import styled from "styled-components"
 
 const Div = styled.div`
   background-color: #ca4848;
-  /* height: fit-content; */
+
   min-width: 100vw;
   min-height: 100vh;
-  /* width: 100%; */
-  /* height: 100%; */
 `
 
 function Home() {
@@ -23,6 +21,7 @@ function Home() {
         <h1>FOMO</h1>
         <footer>
           <span>
+            This is an example on how to use the Image component in Next.js.
             <Image src="/vercel.svg" alt="Vercel Logo" width={200} height={100} />
           </span>
         </footer>
