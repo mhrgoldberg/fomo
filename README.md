@@ -1,34 +1,66 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Fear Of Missing Out(FOMO) - A classroom attendance app
 
-## Getting Started
+## Tech Used
 
-First, run the development server:
+FOMO is a **TypeScript** app running on top of **Node.js**. We are using **Next.js** as our web framework.
+**React.js** is handling our frontend templating and we are using Next.js' built in API routes to
+handle our servers JSON responses. Our data layer is built using **PostgreSQL** and **Prisma**.
+
+## Development tools
+
+This project uses **ESLint** and **Prettier** to enforce code style and linting and formatting commands
+are run in a git pre-commit hook using **Husky**. In order to use this tool with your local VSCode
+source control you can add a `~.huskyrc` with the following contents:
 
 ```bash
-npm run dev
-# or
-yarn dev
+# ~/.huskyrc
+# This loads nvm.sh and sets the correct PATH before running hook
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setting up the project in Development
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+1. Set up `.env` file with a:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+   ```bash
+   DATABASE_URL=postgresql://<db_user>:<db_password>@<db_name>
+   CLOUDINARY_URL=<cloudinary_api_url>
+   ```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+2. Run `npm install`
+3. Run `npx prisma db migrage`
+4. Run `npx prism db seed`
+5. Run `npm run dev`
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+FOMO is currently protected and cached on **Cloudflare**. Sitting behind Cloudflare we have a
+**Caddy** server for a reverse proxy in front of our app and ssl certification. Our production build
+app is running in a **Docker** container networked to a postgres container using **Docker-Compose**.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To deploy this app:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Setup server with a reverse proxy in front of port 8002
+2. Git pull application to server in the `srv` folder
+3. `cd` into the application folder
+4. Create a `.env.production` containing:
 
-## Deploy on Vercel
+   ```bash
+    SECRET_KEY=<secret_key>
+    DATABASE_URL=postgresql://<db_user>:<db_password>@<db_name>
+    CLOUDINARY_URL=<cloudinary_api_url>
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. Create a `.env.production.db` containing:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   ```bash
+   POSTGRES_USER=postgres
+   POSTGRES_DB=postgres
+   POSTGRES_PASSWORD=postgres
+   ```
+
+6. run `docker-compose build`
+
+7. run `docker-compose up`
+8. Prosper!
