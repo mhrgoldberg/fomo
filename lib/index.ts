@@ -1,4 +1,11 @@
-export default function helloWorld(name: string): string {
-  // TODO:interact here with DB PRISMA
-  return `Hello World, ${name}! `
+import prisma from "./db"
+
+export default async function helloWorld(name: string): Promise<string> {
+  const user = await prisma.user.findFirst({
+    where: { name: { contains: name, mode: "insensitive" } },
+  })
+  if (user) {
+    return `Hello World, ${user.name}, ${user.email}!`
+  }
+  return `user not found`
 }
