@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14.1
+    env_file:
+      - .env.production.db
+    networks:
+      - default
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  generate:
+    build:
+      context: .
+      dockerfile: Dockerfile-Dev
+    env_file:
+      - .env.production
+    depends_on:
+      - postgres
+    networks:
+      - default
+    command: npx prisma generate
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile-Dev
+    env_file:
+      - .env.production
+    depends_on:
+      - postgres
+      - generate
+    networks:
+      - default
+    command: npx prisma migrate deploy
+
+  seed:
+    build:
+      context: .
+      dockerfile: Dockerfile-Dev
+    env_file:
+      - .env.production
+    depends_on:
+      - postgres
+      - migrate
+    networks:
+      - default
+    command: npx prisma db seed
+
+volumes:
+  postgres-data:
+
+networks:
+  default:
