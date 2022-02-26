@@ -7,6 +7,7 @@ WORKDIR /app
 
 # If using npm with a `package-lock.json` comment out above and use below instead
 COPY package.json package-lock.json ./
+COPY prisma ./prisma
 RUN npm ci
 
 # Rebuild the source code only when needed
