@@ -36,8 +36,9 @@ export NVM_DIR="$HOME/.nvm"
 ## Deployment
 
 FOMO is currently protected and cached on **Cloudflare**. Sitting behind Cloudflare we have a
-**Caddy** server for a reverse proxy in front of our app and ssl certification. Our production build
-app is running in a **Docker** container networked to a postgres container using **Docker-Compose**.
+**Caddy** serving as a reverse proxy in front of our app as well as providing ssl certification.
+Our production build app is running in a **Docker** container networked to a postgres container
+using **Docker-Compose**.
 
 To deploy this app:
 
@@ -60,7 +61,14 @@ To deploy this app:
    POSTGRES_PASSWORD=postgres
    ```
 
-6. run `docker-compose build`
+6. Create and seed database:
 
-7. run `docker-compose up`
+   1. run `docker-compose -f docker-compose-db-setup.yml build`
+   2. run `docker-compose -f docker-compose-db-setup.yml run`
+
+7. Build production app:
+
+   1. run `docker-compose build`
+   2. run `docker-compose up`
+
 8. Prosper!
