@@ -14,6 +14,8 @@ interface TileProps {
 function Tile(props: TileProps) {
   const [isDragging, setIsDragging] = useState("block")
 
+  // TODO: refactor to not have inner styled component
+
   const StyledDiv = styled.div`
     cursor: pointer;
     margin-bottom: 15px;

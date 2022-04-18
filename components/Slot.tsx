@@ -24,10 +24,6 @@ function Slot(props: SlotProps) {
     const tileId = e.dataTransfer.getData("tileId") // ? .getData() as a string
 
     const tile: HTMLElement | null = document.getElementById(tileId)
-    console.log(tile)
-
-    console.log(props, "WOWOWOWOW")
-    console.log(e, "WOWOWOWOW")
 
     // when dropped, append as child to dropzone
     if (tile) e.currentTarget.appendChild(tile)
