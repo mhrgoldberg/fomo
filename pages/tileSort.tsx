@@ -26,13 +26,13 @@ function TileSort() {
   return (
     <>
       <Div>
-        <Slot id="slot1" className="slot">
-          <Tile id="tile1" className="tile" draggable="true">
+        <Slot id="slot1">
+          <Tile id="tile1" draggable={true}>
             <HomeIcon color="white" />
           </Tile>
         </Slot>
-        <Slot id="slot2" className="slot">
-          <Tile id="tile2" className="tile" draggable="true">
+        <Slot id="slot2">
+          <Tile id="tile2" draggable={true}>
             <LightningBoltIcon color="white" />
           </Tile>
         </Slot>

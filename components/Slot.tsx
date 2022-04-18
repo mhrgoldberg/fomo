@@ -11,28 +11,34 @@ const Div = styled.div`
 
   padding: 15px;
 `
+interface SlotProps {
+  id: string
+  children?: React.ReactNode
+}
 
-function Slot(props) {
-  const drop = (e) => {
+function Slot(props: SlotProps) {
+  const drop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
 
     // ? DataTransfer object holds dragged-item's data during a drag and drop operation.
     const tileId = e.dataTransfer.getData("tileId") // ? .getData() as a string
 
-    const tile = document.getElementById(tileId)
+    const tile: HTMLElement | null = document.getElementById(tileId)
     console.log(tile)
-    tile.display = "block"
+
+    console.log(props, "WOWOWOWOW")
+    console.log(e, "WOWOWOWOW")
 
     // when dropped, append as child to dropzone
-    e.target.appendChild(tile)
+    if (tile) e.currentTarget.appendChild(tile)
   }
 
-  const dragOver = (e) => {
+  const dragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
   }
   return (
-    <Div id={props.id} className={props.className} onDrop={drop} onDragOver={dragOver}>
-      {props.children}
+    <Div onDrop={drop} onDragOver={dragOver}>
+      <div id={props.id}>{props.children}</div>
     </Div>
   )
 }
