@@ -4,7 +4,7 @@ import Image from "next/image"
 import styled from "styled-components"
 
 const Div = styled.div`
-  background-color: #ca4848;
+  background-color: white;
 
   min-width: 100vw;
   min-height: 100vh;
