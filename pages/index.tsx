@@ -1,6 +1,4 @@
-import { signIn } from "next-auth/react"
 import Head from "next/head"
-import Image from "next/image"
 import styled from "styled-components"
 
 const Div = styled.div`
@@ -20,13 +18,6 @@ function Home() {
       </Head>
       <Div>
         <h1>FOMO</h1>
-        <footer>
-          <span>
-            This is an example on how to use the Image component in Next.js.
-            <Image src="/vercel.svg" alt="Vercel Logo" width={200} height={100} />
-            <button onClick={() => signIn()}>Sign In</button>
-          </span>
-        </footer>
       </Div>
     </>
   )
