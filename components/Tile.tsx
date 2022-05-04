@@ -11,17 +11,25 @@ interface TileProps {
   children?: React.ReactNode
 }
 
+interface StyledDivProps {
+  id: string
+  onDragStart: (e: React.DragEvent<HTMLDivElement>) => void
+  onDragOver: (e: React.DragEvent<HTMLDivElement>) => void
+  draggable: boolean
+  display: string
+}
+
+const StyledDiv = styled.div<StyledDivProps>`
+  cursor: pointer;
+  margin-bottom: 15px;
+  padding: 15px 25px;
+  width: 200px;
+  height: 200px;
+  display: ${({ display }) => display};
+`
+
 function Tile(props: TileProps) {
   const [isDragging, setIsDragging] = useState("block")
-
-  // TODO: refactor to not have inner styled component
-
-  const StyledDiv = styled.div`
-    cursor: pointer;
-    margin-bottom: 15px;
-    padding: 15px 25px;
-    display: ${isDragging};
-  `
 
   const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
     const { currentTarget } = e
@@ -40,10 +48,14 @@ function Tile(props: TileProps) {
   }
 
   return (
-    <StyledDiv>
-      <div id={props.id} onDragStart={dragStart} onDragOver={dragOver} draggable={props.draggable}>
-        {props.children}
-      </div>
+    <StyledDiv
+      id={props.id}
+      onDragStart={dragStart}
+      onDragOver={dragOver}
+      draggable={props.draggable}
+      display={isDragging}
+    >
+      {props.children}
     </StyledDiv>
   )
 }

@@ -7,38 +7,53 @@ import Tile from "../components/Tile"
 
 const Div = styled.div`
   background-color: #213359;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 100vh;
+  display: grid;
+  grid-template-areas:
+    "answer1 answer2 answer3"
+    "bank bank bank";
+  grid-template-columns: 200px 200px 200px;
+  grid-template-rows: 1fr 1fr;
+  #slot1 {
+    grid-area: "answer1";
+  }
+  #slot2 {
+    grid-area: "answer2";
+  }
+  #slot3 {
+    grid-area: "answer3";
+  }
 
-  overflow: hidden;
-  margin: 0 auto;
+  #bank {
+    grid-area: "bank";
+  }
+  /* width: 100vw;
+  height: 100vh; */
 
-  padding: 15px;
+  /* overflow: hidden;
+  margin: 0 auto; */
+
+  /* padding: 15px; */
 `
 
 function TileSort() {
   return (
-    <>
-      <Div>
-        <Slot id="slot1">
-          <Tile id="tile1" draggable={true}>
-            <HomeIcon color="white" />
-          </Tile>
-        </Slot>
-        <Slot id="slot2">
-          <Tile id="tile2" draggable={true}>
-            <LightningBoltIcon color="white" />
-          </Tile>
-        </Slot>
-        <Slot id="slot3">
-          <Tile id="tile3" draggable={true}>
-            <AcademicCapIcon color="white" />
-          </Tile>
-        </Slot>
-      </Div>
-    </>
+    <Div>
+      <Slot id="slot1"></Slot>
+      <Slot id="slot2"></Slot>
+      <Slot id="slot3"></Slot>
+
+      <Slot id="bank">
+        <Tile id="tile1" draggable={true}>
+          <HomeIcon color="white" />
+        </Tile>
+        <Tile id="tile2" draggable={true}>
+          <LightningBoltIcon color="white" />
+        </Tile>
+        <Tile id="tile3" draggable={true}>
+          <AcademicCapIcon color="white" />
+        </Tile>
+      </Slot>
+    </Div>
   )
 }
 
