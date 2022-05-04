@@ -1,4 +1,4 @@
-import { signIn, signOut, useSession } from "next-auth/react"
+import { signIn, signOut, useSession, SignInResponse } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import styled from "styled-components"
@@ -17,14 +17,13 @@ const NavContainer = styled.nav`
     color: var(--text-on-primary);
   }
   a:hover {
-    border-color: var(--accent);
-    color: var(--secondary);
+    border-color: var(--secondary);
+    color: var(--secondary-light);
   }
 
   button {
     background-color: var(--secondary);
     color: var(--primary-dark);
-    border: none;
   }
   button:hover {
     background: var(--secondary-dark);
@@ -35,10 +34,39 @@ export default function Navbar() {
   const { data: session } = useSession()
   const router = useRouter()
 
+  const demoSubmit = async () => {
+    const res = (await signIn("credentials", {
+      redirect: false,
+      email: "demo@demo.com",
+      password: "123456",
+    })) as SignInResponse | undefined
+    if (res?.ok && !res?.error) router.push("/auth-route")
+  }
+
   const renderAuthButton = () => {
-    if (router.pathname === "/auth/sign-in") return null
     if (session) return <button onClick={() => signOut()}>Sign Out</button>
-    return <button onClick={() => signIn()}>Sign In</button>
+
+    const signUpButton = <button onClick={() => router.push("/auth/sign-up")}>Sign Up</button>
+    const signInButton = <button onClick={() => signIn()}>Sign In</button>
+    const demoButton = <button onClick={demoSubmit}>Demo</button>
+    if (router.pathname === "/auth/sign-in")
+      return (
+        <div>
+          {demoButton} {signUpButton}
+        </div>
+      )
+    if (router.pathname === "/auth/sign-up")
+      return (
+        <div>
+          {demoButton} {signInButton}
+        </div>
+      )
+
+    return (
+      <div>
+        {demoButton} {signUpButton} {signInButton}
+      </div>
+    )
   }
 
   return (

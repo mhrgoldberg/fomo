@@ -2,15 +2,17 @@ import { getProviders, signIn, SignInResponse, useSession } from "next-auth/reac
 import { useRouter } from "next/router"
 import useFormState from "../../components/forms/useFormState"
 import InputField from "../../components/forms/InputField"
+import SelectField from "../../components/forms/SelectField"
 import { AuthPropTypes } from "."
 import { AuthFormContainer } from "../../styles/formStyles"
 
-type SignInFormState = {
+type SignUpFormState = {
   email: string
   password: string
+  role: "STUDENT" | "TEACHER"
 }
 
-export default function SignIn({ providers }: AuthPropTypes) {
+export default function SignUp({ providers }: AuthPropTypes) {
   const router = useRouter()
   const { data: session } = useSession()
 
@@ -20,10 +22,11 @@ export default function SignIn({ providers }: AuthPropTypes) {
   } = useFormState({
     email: "",
     password: "",
-  } as SignInFormState)
-
+    role: "STUDENT",
+  } as SignUpFormState)
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     const res = (await signIn("credentials", {
       redirect: false,
       email: form.email.value,
@@ -57,18 +60,18 @@ export default function SignIn({ providers }: AuthPropTypes) {
 
   return (
     <AuthFormContainer>
-      <h1>Sign In</h1>
+      <h1>Sign Up</h1>
       <div className="providers">
         {providers &&
           Object.values(providers).map((provider) =>
             provider.name === "Credentials" ? null : (
               <button key={provider.name} onClick={() => signIn(provider.id)}>
-                Sign In with {provider.name}
+                Sign Up with {provider.name}
               </button>
             )
           )}
         <button key={"demo"} onClick={demoSubmit}>
-          Sign in with Demo User
+          Demo Before Commiting!
         </button>
       </div>
       <form onSubmit={onSubmit}>
@@ -92,7 +95,19 @@ export default function SignIn({ providers }: AuthPropTypes) {
           required
           error={error}
         />
-        <button type="submit">Sign In with Credentials</button>
+        <SelectField
+          label="Role"
+          name="role"
+          options={[
+            ["STUDENT", "Student"],
+            ["TEACHER", "Teacher"],
+          ]}
+          onChange={updateField}
+          state={form.role}
+          required
+          error={error}
+        />
+        <button type="submit">Sign Up with Credentials</button>
       </form>
     </AuthFormContainer>
   )

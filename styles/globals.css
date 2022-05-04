@@ -108,7 +108,7 @@ input {
   /* typography */
   font-size: 1.8rem;
   /* style */
-  color: var(--text-on-background);
+  color: var(--primary-dark);
   background: transparent;
   border: none;
   border-bottom: 0.2rem solid var(--primary);
@@ -131,16 +131,23 @@ select:hover {
 }
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  /* Specifically for Chrome autofill background */
-  -webkit-box-shadow: 0 0 0 30px var(--secondary-background) inset !important;
+textarea:-webkit-autofill,
+select:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+input:-webkit-autofill:hover {
+  -webkit-box-shadow: 0 0 0px 1000px var(--secondary-background) inset;
   box-shadow: none;
+  -webkit-text-fill-color: var(--primary-dark);
+  transition: background-color 5000s ease-in-out 0s;
 }
-input:-webkit-autofill {
-  /* Specifically for Chrome autofill text color */
-  -webkit-text-fill-color: var(--primary-light) !important;
+
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill:focus {
+  /* border-color: var(--accent); */
+  -webkit-text-fill-color: var(--accent);
+  -webkit-box-shadow: 0 0 0px 1000px var(--secondary-background) inset;
+  box-shadow: none;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 input::placeholder,
@@ -151,8 +158,8 @@ select::placeholder {
 input:focus,
 select:focus {
   outline: none;
-  color: var(--primary);
-  border-bottom: 0.2rem solid var(--primary);
+  color: var(--primary-light);
+  border-bottom: 0.2rem solid var(--primary-light);
 }
 
 /* Button */

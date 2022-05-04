@@ -4,7 +4,7 @@ import styled from "styled-components"
 const FormDiv = styled.div<FormDivProps>`
   /* layout */
   height: fit-content;
-  width: calc(100% - 2rem);
+  width: 100%;
   display: grid;
   grid-template-rows: auto;
 
@@ -49,8 +49,8 @@ export default function SelectField({
         <option disabled value="">
           {error && !state.updated ? error : placeholderCopy}
         </option>
-        {options.map((value) => (
-          <option value={value} key={value}>
+        {options.map(([key, value]) => (
+          <option key={key} value={value}>
             {value}
           </option>
         ))}
