@@ -1,17 +1,5 @@
 import React from "react"
-import { FormInputContainer } from "../../../styles/formStyles"
-import { FieldType } from "../hooks/useFormState"
-
-type InputFieldPropsTypes = {
-  type: string
-  name: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  state: FieldType
-  label: string
-  error: string
-  placeholder: string
-  required: boolean
-}
+import { FormInputContainer } from "../../styles/formStyles"
 
 export default function InputField({
   type,
@@ -22,7 +10,7 @@ export default function InputField({
   error,
   placeholder,
   required = false,
-}: InputFieldPropsTypes) {
+}: InputFieldProps) {
   const placeholderCopy = placeholder || label
   return (
     <FormInputContainer>
