@@ -16,14 +16,18 @@ const NavContainer = styled.nav`
     font-size: 2.5rem;
     color: var(--text-on-primary);
   }
+  a:hover {
+    border-color: var(--accent);
+    color: var(--secondary);
+  }
 
   button {
-    background-color: var(--secondary-dark);
+    background-color: var(--secondary);
     color: var(--primary-dark);
     border: none;
   }
   button:hover {
-    background: var(--secondary);
+    background: var(--secondary-dark);
   }
 `
 

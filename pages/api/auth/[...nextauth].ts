@@ -10,11 +10,12 @@ export default NextAuth({
   pages: {
     signIn: "/auth/sign-in",
     // error: "/auth/error",
-    newUser: "/auth/new-user",
+    newUser: "/auth/sign-up",
   },
   session: {
     strategy: "jwt",
   },
+  secret: process.env.NEXT_AUTH_SECRET,
   theme: { colorScheme: "light", brandColor: "#4527a0" },
   providers: [
     GithubProvider({
@@ -42,7 +43,6 @@ export default NextAuth({
         // confirm password is valid
         if (!user?.password) return null
         const valid = await checkPassword(credentials.password, user.password)
-        console.log(valid)
         if (!valid) return null
         // return user in the case that all checks have passed
         return user
