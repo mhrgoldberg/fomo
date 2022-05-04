@@ -7,6 +7,16 @@ import { checkPassword } from "../../../lib/user/auth"
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
+  pages: {
+    signIn: "/auth/sign-in",
+    // error: "/auth/error",
+    newUser: "/auth/sign-up",
+  },
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXT_AUTH_SECRET,
+  theme: { colorScheme: "light", brandColor: "#4527a0" },
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
@@ -24,14 +34,17 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        // confirm form validations
         if (!credentials?.email || !credentials?.password) return null
+        // confirm user exists
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         })
+        // confirm password is valid
         if (!user?.password) return null
         const valid = await checkPassword(credentials.password, user.password)
         if (!valid) return null
-
+        // return user in the case that all checks have passed
         return user
       },
     }),

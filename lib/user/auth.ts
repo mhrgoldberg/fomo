@@ -19,5 +19,6 @@ export async function getUser(email: string): Promise<User | null> {
 }
 
 export async function checkPassword(password: string, hash: string): Promise<boolean> {
-  return bcrypt.compare(password, hash)
+  const res = await bcrypt.compare(password, hash)
+  return res
 }

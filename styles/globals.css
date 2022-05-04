@@ -11,12 +11,13 @@
   /* text */
   --text-on-background: #000000;
   --text-on-error: #ffffff;
-  --text-on-primary: #ffffff;
+  --text-on-primary: #d1c4e9;
   /* background */
   --primary-background: #ffffff;
-  --secondary-backround: hsl(0, 0%, 93%);
+  --secondary-background: #eeeeee;
   /* sizing */
   --input-border-radius: 0.3rem;
+  --card-border-radius: 1rem;
 }
 
 a {
@@ -74,7 +75,7 @@ a {
 }
 a:hover {
   border-bottom: 0.2rem solid var(--secondary-dark);
-  color: var(--primary-cyan);
+  color: var(--secondary-dark);
 }
 
 /* Text */
@@ -90,16 +91,11 @@ form {
   grid-template-columns: 1fr;
   grid-gap: 2rem;
   place-items: center center;
-  padding: 4rem;
   /* style */
-  background-color: var(--secondary-dark);
-  border-radius: 1rem;
+  /* border-radius: 1rem; */
 }
 
 .form > button {
-  /* layout */
-  width: calc(100% - 2rem);
-  /* typography */
   font-size: 2.2rem;
   font-weight: 500;
 }
@@ -139,7 +135,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   /* Specifically for Chrome autofill background */
-  -webkit-box-shadow: 0 0 0 30px var(--secondary-dark) inset !important;
+  -webkit-box-shadow: 0 0 0 30px var(--secondary-background) inset !important;
   box-shadow: none;
 }
 input:-webkit-autofill {
@@ -149,14 +145,14 @@ input:-webkit-autofill {
 
 input::placeholder,
 select::placeholder {
-  color: var(--primary-gray);
+  color: var(--secondary-dark);
 }
 
 input:focus,
 select:focus {
   outline: none;
-  color: var(--secondary);
-  border-bottom: 0.2rem solid var(--secondary);
+  color: var(--primary);
+  border-bottom: 0.2rem solid var(--primary);
 }
 
 /* Button */
@@ -177,7 +173,7 @@ button {
 button:hover {
   cursor: pointer;
   color: var(--primary-dark);
-  background: var(--primary-cyan);
+  background: var(--secondary);
 }
 
 ::placeholder {
