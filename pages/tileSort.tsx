@@ -1,6 +1,6 @@
 // import Head from "next/head"
 // import Image from "next/image"
-import { HomeIcon, LightningBoltIcon } from "@heroicons/react/outline"
+import { HomeIcon, LightningBoltIcon, AcademicCapIcon } from "@heroicons/react/outline"
 import styled from "styled-components"
 import Slot from "../components/Slot"
 import Tile from "../components/Tile"
@@ -10,16 +10,12 @@ const Div = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  // LOOK BACK HERE
-  max-width: 800px;
   height: 100vh;
 
   overflow: hidden;
   margin: 0 auto;
 
   padding: 15px;
-  /* min-width: 100vw;
-  min-height: 100vh; */
 `
 
 function TileSort() {
@@ -34,6 +30,11 @@ function TileSort() {
         <Slot id="slot2">
           <Tile id="tile2" draggable={true}>
             <LightningBoltIcon color="white" />
+          </Tile>
+        </Slot>
+        <Slot id="slot3">
+          <Tile id="tile3" draggable={true}>
+            <AcademicCapIcon color="white" />
           </Tile>
         </Slot>
       </Div>
