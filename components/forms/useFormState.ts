@@ -15,7 +15,7 @@ export default function useFormState(inputFields: InitialFieldTypes) {
   }
 
   // fields should be an pojo in this format {<fieldName>:<defaultValue>}
-  const [form, setForm] = useState<Record<string, FieldType>>(createInitialState(inputFields))
+  const [form, setForm] = useState<FieldTypes>(createInitialState(inputFields))
   const [error, setError] = useState<string>("")
 
   function updateField(e: React.ChangeEvent<HTMLInputElement>) {
