@@ -4,12 +4,11 @@ import styled from "styled-components"
 const Div = styled.div`
   display: flex;
   border: solid white 2px;
-  flex-direction: column;
-  width: 100%;
-
-  max-width: 300px;
-
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
   padding: 15px;
+  /* overflow: scroll; */
 `
 interface SlotProps {
   id: string
@@ -33,8 +32,8 @@ function Slot(props: SlotProps) {
     e.preventDefault()
   }
   return (
-    <Div onDrop={drop} onDragOver={dragOver}>
-      <div id={props.id}>{props.children}</div>
+    <Div onDrop={drop} onDragOver={dragOver} id={props.id}>
+      {props.children}
     </Div>
   )
 }
