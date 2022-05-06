@@ -1,13 +1,8 @@
 import { Prisma, User } from "@prisma/client"
 import bcrypt from "bcrypt"
 import prisma from "../db"
+import type { NewUserSubmission } from "./validation"
 // crteate user and hash password
-type NewUserSubmission = {
-  name: string
-  email: string
-  password: string
-  image: string
-}
 
 export async function createUserWithPassword({
   name,
@@ -15,7 +10,6 @@ export async function createUserWithPassword({
   email,
   image,
 }: NewUserSubmission): Promise<User> {
-  console.log(name, password, email, image)
   const newUser: Prisma.UserCreateInput = { name, password, email }
   if (image) newUser.image = image
 

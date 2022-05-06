@@ -3,7 +3,7 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GithubProvider from "next-auth/providers/github"
 import prisma from "../../../lib/db"
-import { checkPassword, getUser } from "../../../lib/user/auth"
+import { checkPassword, getUser } from "../../../lib/users/util"
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
