@@ -3,6 +3,7 @@ type InitialFieldTypes = Record<string, string | number>
 type FieldType = {
   value: string | number
   updated: boolean
+  error: string
 }
 
 type FieldTypes = Record<string, FieldType>
@@ -16,7 +17,7 @@ interface FormFileldProps {
   state: FieldType
   label: string
   error: string
-  placeholder: string
+  placeholder?: string
   required: boolean
 }
 
@@ -26,6 +27,6 @@ interface InputFieldProps extends FormFileldProps {
 }
 
 interface SelectFieldProps extends FormFileldProps {
-  options: string[]
+  options: string[][]
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
