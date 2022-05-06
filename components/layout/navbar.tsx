@@ -74,7 +74,7 @@ export default function Navbar() {
   return (
     <NavContainer>
       <ul>
-        <Link href="/">Home</Link>
+        <Link href="/">FOMO</Link>
       </ul>
       <span>{renderAuthButton()}</span>
     </NavContainer>
