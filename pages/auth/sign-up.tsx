@@ -1,42 +1,63 @@
 import { getProviders, signIn, SignInResponse, useSession } from "next-auth/react"
 import { useRouter } from "next/router"
+import { useMutation } from "react-query"
 import useFormState from "../../components/forms/useFormState"
 import InputField from "../../components/forms/InputField"
-import SelectField from "../../components/forms/SelectField"
 import { AuthPropTypes } from "."
 import { AuthFormContainer } from "../../styles/formStyles"
+import { UserResponse } from "../../lib/users/controller"
+import createError, { ErrorResponse, ErrorWithData } from "../../lib/createError"
 
 type SignUpFormState = {
+  name: string
   email: string
   password: string
-  role: "STUDENT" | "TEACHER"
 }
 
 export default function SignUp({ providers }: AuthPropTypes) {
   const router = useRouter()
   const { data: session } = useSession()
-
   const {
-    state: { form, error },
-    update: { setError, updateField, setUpdatedStatusFalse },
+    state: { form },
+    update: { updateField, setUpdatedStatusFalse, updateErrorFields },
   } = useFormState({
     email: "",
     password: "",
-    role: "STUDENT",
+    name: "",
   } as SignUpFormState)
+
+  const userMutation = useMutation(
+    async (newUser: SignUpFormState) => {
+      const res = await fetch("/api/users", { method: "POST", body: JSON.stringify(newUser) })
+      if (!res.ok) {
+        const data: ErrorResponse = await res.json()
+        throw createError(data)
+      }
+      const data: UserResponse = await res.json()
+      return data.user
+    },
+    {
+      onSuccess: async (data, variables) => {
+        const res = (await signIn("credentials", {
+          redirect: false,
+          email: data.email,
+          password: variables.password,
+        })) as SignInResponse | undefined
+        if (res?.ok && !res?.error) router.push("/auth-route")
+      },
+      onError: (e: ErrorWithData) => {
+        updateErrorFields(e.data.errors)
+      },
+    }
+  )
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    const res = (await signIn("credentials", {
-      redirect: false,
-      email: form.email.value,
-      password: form.password.value,
-    })) as SignInResponse | undefined
-    if (res?.ok && !res?.error) router.push("/auth-route")
-    if (res?.error === "CredentialsSignin") {
-      setUpdatedStatusFalse()
-      setError(() => "Invalid email or password")
-    }
+    userMutation.mutate({
+      name: form.name.value.toString(),
+      email: form.email.value.toString(),
+      password: form.password.value.toString(),
+    })
   }
 
   const demoSubmit = async () => {
@@ -48,7 +69,10 @@ export default function SignUp({ providers }: AuthPropTypes) {
     })) as SignInResponse | undefined
     if (res?.ok && !res?.error) router.push("/auth-route")
     if (res?.error === "CredentialsSignin") {
-      setError("Invalid email or password")
+      updateErrorFields({
+        email: "Email or password is incorrect",
+        password: "Email or password is incorrect",
+      })
     }
   }
 
@@ -76,6 +100,16 @@ export default function SignUp({ providers }: AuthPropTypes) {
       </div>
       <form onSubmit={onSubmit}>
         <InputField
+          label="Username"
+          type="text"
+          name="name"
+          placeholder="Something fun!"
+          onChange={updateField}
+          state={form.name}
+          required
+          error={form.name.error}
+        />
+        <InputField
           label="Email"
           type="email"
           name="email"
@@ -83,7 +117,7 @@ export default function SignUp({ providers }: AuthPropTypes) {
           onChange={updateField}
           state={form.email}
           required
-          error={error}
+          error={form.email.error}
         />
         <InputField
           label="Password"
@@ -93,20 +127,9 @@ export default function SignUp({ providers }: AuthPropTypes) {
           onChange={updateField}
           state={form.password}
           required
-          error={error}
+          error={form.password.error}
         />
-        <SelectField
-          label="Role"
-          name="role"
-          options={[
-            ["STUDENT", "Student"],
-            ["TEACHER", "Teacher"],
-          ]}
-          onChange={updateField}
-          state={form.role}
-          required
-          error={error}
-        />
+
         <button type="submit">Sign Up with Credentials</button>
       </form>
     </AuthFormContainer>

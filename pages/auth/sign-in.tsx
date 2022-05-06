@@ -15,8 +15,8 @@ export default function SignIn({ providers }: AuthPropTypes) {
   const { data: session } = useSession()
 
   const {
-    state: { form, error },
-    update: { setError, updateField, setUpdatedStatusFalse },
+    state: { form },
+    update: { updateField, setUpdatedStatusFalse, updateErrorFields },
   } = useFormState({
     email: "",
     password: "",
@@ -31,8 +31,9 @@ export default function SignIn({ providers }: AuthPropTypes) {
     })) as SignInResponse | undefined
     if (res?.ok && !res?.error) router.push("/auth-route")
     if (res?.error === "CredentialsSignin") {
-      setUpdatedStatusFalse()
-      setError(() => "Invalid email or password")
+      updateErrorFields({
+        password: "Email or password is incorrect",
+      })
     }
   }
 
@@ -45,7 +46,10 @@ export default function SignIn({ providers }: AuthPropTypes) {
     })) as SignInResponse | undefined
     if (res?.ok && !res?.error) router.push("/auth-route")
     if (res?.error === "CredentialsSignin") {
-      setError("Invalid email or password")
+      updateErrorFields({
+        email: "Email or password is incorrect",
+        password: "Email or password is incorrect",
+      })
     }
   }
 
@@ -80,7 +84,7 @@ export default function SignIn({ providers }: AuthPropTypes) {
           onChange={updateField}
           state={form.email}
           required
-          error={error}
+          error={form.email.error}
         />
         <InputField
           label="Password"
@@ -90,7 +94,7 @@ export default function SignIn({ providers }: AuthPropTypes) {
           onChange={updateField}
           state={form.password}
           required
-          error={error}
+          error={form.password.error}
         />
         <button type="submit">Sign In with Credentials</button>
       </form>
