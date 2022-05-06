@@ -4,7 +4,7 @@ import styled from "styled-components"
 const FormDiv = styled.div<FormDivProps>`
   /* layout */
   height: fit-content;
-  width: calc(100% - 2rem);
+  width: 100%;
   display: grid;
   grid-template-rows: auto;
 
@@ -34,7 +34,7 @@ export default function SelectField({
   placeholder,
   required = false,
 }: SelectFieldProps) {
-  const placeholderCopy = placeholder || label
+  const placeholderOrLabel = placeholder || label
   return (
     <FormDiv updated={state?.updated}>
       {label && <label htmlFor={name}>{label}</label>}
@@ -47,10 +47,10 @@ export default function SelectField({
         required={required}
       >
         <option disabled value="">
-          {error && !state.updated ? error : placeholderCopy}
+          {error && !state.updated ? error : placeholderOrLabel}
         </option>
-        {options.map((value) => (
-          <option value={value} key={value}>
+        {options.map(([key, value]) => (
+          <option key={key} value={value}>
             {value}
           </option>
         ))}

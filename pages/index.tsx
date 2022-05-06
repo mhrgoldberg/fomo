@@ -3,9 +3,6 @@ import styled from "styled-components"
 
 const Div = styled.div`
   background-color: white;
-
-  min-width: 100vw;
-  min-height: 100vh;
 `
 
 function Home() {

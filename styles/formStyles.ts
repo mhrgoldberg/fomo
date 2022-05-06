@@ -1,5 +1,42 @@
 import styled from "styled-components"
 
+export const AuthFormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--secondary-background);
+  width: 35rem;
+  border-radius: var(--card-border-radius);
+  padding: 4rem;
+  div.providers {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 2rem 0;
+    border-bottom: 0.2rem dashed var(--secondary-dark);
+  }
+
+  div.providers:first-child {
+    padding-top: 0;
+  }
+  form {
+    width: 100%;
+  }
+  label {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  button {
+    width: 100%;
+    margin: 0;
+    padding: 1rem 2rem;
+  }
+`
+
 export const FormContainer = styled.div`
   /* layout (Container Grid)*/
   display: grid;

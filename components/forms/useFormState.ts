@@ -1,40 +1,69 @@
 import { useState } from "react"
 
 export default function useFormState(inputFields: InitialFieldTypes) {
+  // inputFields should be an pojo in this format {<fieldName>:<defaultValue>}
+
   function createInitialState(fields: InitialFieldTypes) {
     const initialState: Record<string, FieldType> = {}
-    Object.keys(fields).forEach((fieldName) => {
-      if ({}.hasOwnProperty.call(fields, fieldName)) {
-        initialState[fieldName] = {
-          value: fields[fieldName],
-          updated: false,
-        }
+    Object.keys(fields).reduce((acc, fieldName) => {
+      acc[fieldName] = {
+        value: fields[fieldName],
+        updated: false,
+        error: "",
       }
-    })
+      return acc
+    }, initialState)
     return initialState
   }
 
-  // fields should be an pojo in this format {<fieldName>:<defaultValue>}
   const [form, setForm] = useState<FieldTypes>(createInitialState(inputFields))
-  const [error, setError] = useState<string>("")
 
-  function updateField(e: React.ChangeEvent<HTMLInputElement>) {
-    const newState = { ...form }
-    const newField = newState[e.target.name]
-    if (!newField.updated) {
-      newField.updated = true
-    }
-    newField.value = e.target.value
-    setForm(newState)
-  }
-
-  function updateFieldByName(fieldName: string, value: string | number) {
-    const newState = { ...form }
+  function updateStateValue(
+    newState: { [x: string]: FieldType },
+    fieldName: string,
+    value: string | number
+  ) {
     const newField = newState[fieldName]
     if (!newField.updated) {
       newField.updated = true
+      newField.error = ""
     }
     newField.value = value
+  }
+
+  function updateField(
+    e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
+  ) {
+    const newState = { ...form }
+    updateStateValue(newState, e.target.name, e.target.value)
+    setForm(newState)
+  }
+
+  function updateFieldByName(fieldName: string | [], value: string | number) {
+    const newState = { ...form }
+
+    if (Array.isArray(fieldName)) {
+      fieldName.forEach((field) => {
+        updateStateValue(newState, field, value)
+      })
+    } else {
+      updateStateValue(newState, fieldName, value)
+    }
+
+    setForm(newState)
+  }
+
+  function updateErrorFields(errors: { [key: string]: string }) {
+    const newState = { ...form }
+    const updateErrorMessage = (fieldNameStr: string, errorMessage: string) => {
+      const newField = newState[fieldNameStr]
+      newField.updated = false
+      newField.error = errorMessage
+    }
+
+    Object.entries(errors).forEach(([fieldName, error]) => {
+      updateErrorMessage(fieldName, error)
+    })
     setForm(newState)
   }
 
@@ -45,6 +74,7 @@ export default function useFormState(inputFields: InitialFieldTypes) {
         newForm[fieldName] = {
           value: form[fieldName].value,
           updated: false,
+          error: form[fieldName].error,
         }
       }
     })
@@ -63,8 +93,8 @@ export default function useFormState(inputFields: InitialFieldTypes) {
   }
 
   return {
-    state: { form, error },
-    update: { setUpdatedStatusFalse, updateField, updateFieldByName, setError },
+    state: { form },
+    update: { setUpdatedStatusFalse, updateField, updateFieldByName, updateErrorFields },
     submit: formatSubmit,
   }
 }

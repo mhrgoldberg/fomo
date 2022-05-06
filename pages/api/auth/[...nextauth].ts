@@ -3,7 +3,7 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GithubProvider from "next-auth/providers/github"
 import prisma from "../../../lib/db"
-import { checkPassword } from "../../../lib/user/auth"
+import { checkPassword, getUser } from "../../../lib/users/util"
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -37,9 +37,7 @@ export default NextAuth({
         // confirm form validations
         if (!credentials?.email || !credentials?.password) return null
         // confirm user exists
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        })
+        const user = await getUser(credentials.email)
         // confirm password is valid
         if (!user?.password) return null
         const valid = await checkPassword(credentials.password, user.password)

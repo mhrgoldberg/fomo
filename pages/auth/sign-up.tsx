@@ -1,40 +1,63 @@
 import { getProviders, signIn, SignInResponse, useSession } from "next-auth/react"
 import { useRouter } from "next/router"
+import { useMutation } from "react-query"
 import useFormState from "../../components/forms/useFormState"
 import InputField from "../../components/forms/InputField"
 import { AuthPropTypes } from "."
 import { AuthFormContainer } from "../../styles/formStyles"
+import { UserResponse } from "../../lib/users/controller"
+import createError, { ErrorResponse, ErrorWithData } from "../../lib/createError"
 
-type SignInFormState = {
+type SignUpFormState = {
+  name: string
   email: string
   password: string
 }
 
-export default function SignIn({ providers }: AuthPropTypes) {
+export default function SignUp({ providers }: AuthPropTypes) {
   const router = useRouter()
   const { data: session } = useSession()
-
   const {
     state: { form },
     update: { updateField, setUpdatedStatusFalse, updateErrorFields },
   } = useFormState({
     email: "",
     password: "",
-  } as SignInFormState)
+    name: "",
+  } as SignUpFormState)
+
+  const userMutation = useMutation(
+    async (newUser: SignUpFormState) => {
+      const res = await fetch("/api/users", { method: "POST", body: JSON.stringify(newUser) })
+      if (!res.ok) {
+        const data: ErrorResponse = await res.json()
+        throw createError(data)
+      }
+      const data: UserResponse = await res.json()
+      return data.user
+    },
+    {
+      onSuccess: async (data, variables) => {
+        const res = (await signIn("credentials", {
+          redirect: false,
+          email: data.email,
+          password: variables.password,
+        })) as SignInResponse | undefined
+        if (res?.ok && !res?.error) router.push("/auth-route")
+      },
+      onError: (e: ErrorWithData) => {
+        updateErrorFields(e.data.errors)
+      },
+    }
+  )
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const res = (await signIn("credentials", {
-      redirect: false,
-      email: form.email.value,
-      password: form.password.value,
-    })) as SignInResponse | undefined
-    if (res?.ok && !res?.error) router.push("/auth-route")
-    if (res?.error === "CredentialsSignin") {
-      updateErrorFields({
-        password: "Email or password is incorrect",
-      })
-    }
+    userMutation.mutate({
+      name: form.name.value.toString(),
+      email: form.email.value.toString(),
+      password: form.password.value.toString(),
+    })
   }
 
   const demoSubmit = async () => {
@@ -61,21 +84,31 @@ export default function SignIn({ providers }: AuthPropTypes) {
 
   return (
     <AuthFormContainer>
-      <h1>Sign In</h1>
+      <h1>Sign Up</h1>
       <div className="providers">
         {providers &&
           Object.values(providers).map((provider) =>
             provider.name === "Credentials" ? null : (
               <button key={provider.name} onClick={() => signIn(provider.id)}>
-                Sign In with {provider.name}
+                Sign Up with {provider.name}
               </button>
             )
           )}
         <button key={"demo"} onClick={demoSubmit}>
-          Sign in with Demo User
+          Demo Before Commiting!
         </button>
       </div>
       <form onSubmit={onSubmit}>
+        <InputField
+          label="Username"
+          type="text"
+          name="name"
+          placeholder="Something fun!"
+          onChange={updateField}
+          state={form.name}
+          required
+          error={form.name.error}
+        />
         <InputField
           label="Email"
           type="email"
@@ -96,7 +129,8 @@ export default function SignIn({ providers }: AuthPropTypes) {
           required
           error={form.password.error}
         />
-        <button type="submit">Sign In with Credentials</button>
+
+        <button type="submit">Sign Up with Credentials</button>
       </form>
     </AuthFormContainer>
   )
