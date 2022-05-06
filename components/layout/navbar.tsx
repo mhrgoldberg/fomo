@@ -31,7 +31,7 @@ const NavContainer = styled.nav`
 `
 
 export default function Navbar() {
-  const { data: session } = useSession()
+  const { status } = useSession()
   const router = useRouter()
 
   const demoSubmit = async () => {
@@ -40,15 +40,17 @@ export default function Navbar() {
       email: "demo@demo.com",
       password: "123456",
     })) as SignInResponse | undefined
-    if (res?.ok && !res?.error) router.push("/auth-route")
+    if (res?.ok && !res?.error) router.push("/dashboard")
   }
 
   const renderAuthButton = () => {
-    if (session) return <button onClick={() => signOut()}>Sign Out</button>
+    if (status === "loading") return null
+    if (status === "authenticated") return <button onClick={() => signOut()}>Sign Out</button>
 
     const signUpButton = <button onClick={() => router.push("/auth/sign-up")}>Sign Up</button>
     const signInButton = <button onClick={() => signIn()}>Sign In</button>
     const demoButton = <button onClick={demoSubmit}>Demo</button>
+
     if (router.pathname === "/auth/sign-in")
       return (
         <div>

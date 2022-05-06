@@ -29,7 +29,7 @@ export default function SignIn({ providers }: AuthPropTypes) {
       email: form.email.value,
       password: form.password.value,
     })) as SignInResponse | undefined
-    if (res?.ok && !res?.error) router.push("/auth-route")
+    if (res?.ok && !res?.error) router.push("/dashboard")
     if (res?.error === "CredentialsSignin") {
       updateErrorFields({
         password: "Email or password is incorrect",
@@ -44,7 +44,7 @@ export default function SignIn({ providers }: AuthPropTypes) {
       email: "demo@demo.com",
       password: "123456",
     })) as SignInResponse | undefined
-    if (res?.ok && !res?.error) router.push("/auth-route")
+    if (res?.ok && !res?.error) router.push("/dashboard")
     if (res?.error === "CredentialsSignin") {
       updateErrorFields({
         email: "Email or password is incorrect",

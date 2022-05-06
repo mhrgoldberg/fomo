@@ -6,9 +6,9 @@ export const AuthFormContainer = styled.div`
   align-items: center;
   justify-content: center;
   background: var(--secondary-background);
-  width: 35rem;
+  width: 45rem;
   border-radius: var(--card-border-radius);
-  padding: 4rem;
+  padding: 3rem 5rem;
   div.providers {
     width: 100%;
     display: flex;
@@ -79,6 +79,7 @@ export const FormInputContainer = styled.div`
     border-bottom: 0.2rem solid var(--error) !important;
     ::placeholder {
       color: var(--error);
+      font-size: 1.2rem;
     }
   }
 

@@ -1,10 +1,10 @@
 import { useSession } from "next-auth/react"
 
-function AuthRoute() {
+function Dashboard() {
   const { data: session } = useSession()
   return <div>{session?.user?.email}</div>
 }
 
-AuthRoute.auth = true
+Dashboard.auth = true
 
-export default AuthRoute
+export default Dashboard

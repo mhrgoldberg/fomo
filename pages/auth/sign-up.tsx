@@ -16,7 +16,7 @@ type SignUpFormState = {
 
 export default function SignUp({ providers }: AuthPropTypes) {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { status } = useSession()
   const {
     state: { form },
     update: { updateField, setUpdatedStatusFalse, updateErrorFields },
@@ -43,7 +43,7 @@ export default function SignUp({ providers }: AuthPropTypes) {
           email: data.email,
           password: variables.password,
         })) as SignInResponse | undefined
-        if (res?.ok && !res?.error) router.push("/auth-route")
+        if (res?.ok && !res?.error) router.push("/dashboard")
       },
       onError: (e: ErrorWithData) => {
         updateErrorFields(e.data.errors)
@@ -67,7 +67,7 @@ export default function SignUp({ providers }: AuthPropTypes) {
       email: "demo@demo.com",
       password: "123456",
     })) as SignInResponse | undefined
-    if (res?.ok && !res?.error) router.push("/auth-route")
+    if (res?.ok && !res?.error) router.push("/dashboard")
     if (res?.error === "CredentialsSignin") {
       updateErrorFields({
         email: "Email or password is incorrect",
@@ -76,7 +76,7 @@ export default function SignUp({ providers }: AuthPropTypes) {
     }
   }
 
-  if (session) {
+  if (status === "authenticated") {
     // Redirect to the home page if the user is already signed in
     router.push("/")
     return null
@@ -137,6 +137,8 @@ export default function SignUp({ providers }: AuthPropTypes) {
 }
 
 export async function getServerSideProps() {
+  const providers = await getProviders()
+  console.log(providers)
   return {
     props: {
       providers: await getProviders(),
