@@ -64,7 +64,7 @@ To deploy this app:
 6. Create and seed database:
 
    1. run `docker-compose -f docker-compose-db-setup.yml build`
-   2. run `docker-compose -f docker-compose-db-setup.yml run`
+   2. run `docker-compose -f docker-compose-db-setup.yml up`
 
 7. Build production app:
 
