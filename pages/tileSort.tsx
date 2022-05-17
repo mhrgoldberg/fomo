@@ -1,9 +1,10 @@
 // import Head from "next/head"
 // import Image from "next/image"
+import { useState } from "react"
 import { HomeIcon, LightningBoltIcon, AcademicCapIcon } from "@heroicons/react/outline"
 import styled from "styled-components"
-import Slot from "../components/Slot"
-import Tile from "../components/Tile"
+import Slot from "../components/tiles/Slot"
+import Tile from "../components/tiles/Tile"
 
 const Div = styled.div`
   background-color: #213359;
@@ -26,30 +27,36 @@ const Div = styled.div`
   #bank {
     grid-area: "bank";
   }
-  /* width: 100vw;
-  height: 100vh; */
-
-  /* overflow: hidden;
-  margin: 0 auto; */
-
-  /* padding: 15px; */
 `
 
 function TileSort() {
+  // numTiles: number
+  const [dragging, setDragging] = useState<DraggingStateType>({
+    tile1: "block",
+    tile2: "block",
+    tile3: "block",
+  })
+
+  const toggleDisplay: ToggleDisplayType = (tileId: string) => {
+    const newState: DraggingStateType = { ...dragging }
+    newState[tileId] = newState[tileId] === "block" ? "none" : "block"
+    setDragging(newState)
+  }
+
   return (
     <Div>
-      <Slot id="slot1"></Slot>
-      <Slot id="slot2"></Slot>
-      <Slot id="slot3"></Slot>
+      <Slot id="slot1" toggleDisplay={toggleDisplay}></Slot>
+      <Slot id="slot2" toggleDisplay={toggleDisplay}></Slot>
+      <Slot id="slot3" toggleDisplay={toggleDisplay}></Slot>
 
-      <Slot id="bank">
-        <Tile id="tile1" draggable={true}>
+      <Slot id="bank" toggleDisplay={toggleDisplay}>
+        <Tile id="tile1" draggable={true} toggleDisplay={toggleDisplay} dragging={dragging}>
           <HomeIcon color="white" />
         </Tile>
-        <Tile id="tile2" draggable={true}>
+        <Tile id="tile2" draggable={true} toggleDisplay={toggleDisplay} dragging={dragging}>
           <LightningBoltIcon color="white" />
         </Tile>
-        <Tile id="tile3" draggable={true}>
+        <Tile id="tile3" draggable={true} toggleDisplay={toggleDisplay} dragging={dragging}>
           <AcademicCapIcon color="white" />
         </Tile>
       </Slot>

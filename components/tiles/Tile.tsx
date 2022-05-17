@@ -1,13 +1,10 @@
-import { useState } from "react"
 import styled from "styled-components"
-
-// interface DivProps {
-//   isDragging: boolean
-// }
 
 interface TileProps {
   id: string
   draggable: boolean
+  toggleDisplay: ToggleDisplayType
+  dragging: DraggingStateType
   children?: React.ReactNode
 }
 
@@ -29,17 +26,13 @@ const StyledDiv = styled.div<StyledDivProps>`
 `
 
 function Tile(props: TileProps) {
-  const [isDragging, setIsDragging] = useState("block")
+  const tileID: string = props.id
 
   const dragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    const { currentTarget } = e
+    e.dataTransfer.setData("tileId", tileID)
 
-    e.dataTransfer.setData("tileId", currentTarget.id)
-
-    // delay making card invisible so we can drag
     setTimeout(() => {
-      // console.log(currentTarget, "***********************************************************")
-      setIsDragging("none")
+      props.toggleDisplay(tileID)
     }, 0)
   }
 
@@ -53,7 +46,7 @@ function Tile(props: TileProps) {
       onDragStart={dragStart}
       onDragOver={dragOver}
       draggable={props.draggable}
-      display={isDragging}
+      display={props.dragging[tileID]}
     >
       {props.children}
     </StyledDiv>

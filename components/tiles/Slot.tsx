@@ -13,6 +13,7 @@ const Div = styled.div`
 interface SlotProps {
   id: string
   children?: React.ReactNode
+  toggleDisplay: (tileID: string) => void
 }
 
 function Slot(props: SlotProps) {
@@ -21,7 +22,7 @@ function Slot(props: SlotProps) {
 
     // ? DataTransfer object holds dragged-item's data during a drag and drop operation.
     const tileId = e.dataTransfer.getData("tileId") // ? .getData() as a string
-
+    props.toggleDisplay(tileId)
     const tile: HTMLElement | null = document.getElementById(tileId)
 
     // when dropped, append as child to dropzone
